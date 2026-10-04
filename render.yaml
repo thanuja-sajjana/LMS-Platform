@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: lms-platform
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: LMS_DATA_DIR
+        value: /var/data
+      - key: ALLOW_INSTRUCTOR_REGISTRATION
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: LMS_ADMIN_USERNAME
+        sync: false
+      - key: LMS_ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: lms-data
+      mountPath: /var/data
+      sizeGB: 1

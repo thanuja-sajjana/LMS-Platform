@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+
+# Local databases and submitted assignment files
+*.db
+*.db-shm
+*.db-wal
+uploads/
+
+# Local credentials
+pass.txt

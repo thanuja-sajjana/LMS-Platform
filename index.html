@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal LMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+
+        :root {
+            color-scheme: light;
+            --page-bg: #f5f7fb;
+            --surface: #ffffff;
+            --surface-muted: #f7f8fc;
+            --text-primary: #182230;
+            --text-secondary: #667085;
+            --border: #e5e9f2;
+            --accent: #4f46e5;
+            --accent-dark: #4338ca;
+            --shadow-card: 0 10px 30px rgba(28, 39, 76, 0.055);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            background:
+                radial-gradient(ellipse at 88% 5%, rgba(129, 140, 248, 0.10), transparent 27rem),
+                var(--page-bg) !important;
+            color: var(--text-primary) !important;
+            font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+            letter-spacing: -0.01em;
+        }
+        h1, h2, h3, h4, nav a:first-child {
+            font-family: 'Manrope', 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+            letter-spacing: -0.035em;
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: linear-gradient(110deg, #3730a3 0%, #4f46e5 55%, #6366f1 100%) !important;
+            box-shadow: 0 8px 24px rgba(49, 46, 129, 0.22) !important;
+        }
+        nav > div {
+            min-height: 68px;
+        }
+        nav a, nav button {
+            transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+        }
+        nav a:hover, nav button:hover {
+            transform: translateY(-1px);
+        }
+        nav > div > a:first-child {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-weight: 800;
+            letter-spacing: -0.045em;
+        }
+        nav > div > a:first-child::before {
+            content: "✦";
+            display: inline-grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.36);
+            border-radius: 11px;
+            background: rgba(255, 255, 255, 0.15);
+            font-family: 'Manrope', sans-serif;
+            font-size: 18px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+        }
+        main {
+            padding-top: 2rem !important;
+            padding-bottom: 3rem !important;
+        }
+        main > .mb-6 form {
+            padding: 0.65rem;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--surface);
+            box-shadow: var(--shadow-card);
+        }
+        main h2 {
+            color: #20294a;
+            font-weight: 800;
+        }
+        main .bg-white {
+            background-color: var(--surface) !important;
+            border-color: var(--border) !important;
+            border-radius: 18px !important;
+            box-shadow: var(--shadow-card) !important;
+        }
+        main a[class*="bg-indigo-600"],
+        main button[class*="bg-indigo-600"] {
+            border: 1px solid transparent;
+            border-radius: 11px !important;
+            background: linear-gradient(115deg, #4f46e5, #6366f1) !important;
+            box-shadow: 0 5px 12px rgba(79, 70, 229, 0.18);
+            font-weight: 600;
+            transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+        }
+        main a[class*="bg-indigo-600"]:hover,
+        main button[class*="bg-indigo-600"]:hover {
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
+            filter: brightness(1.04);
+            transform: translateY(-1px);
+        }
+        main a[class*="text-indigo-600"],
+        main a[class*="text-indigo-700"] {
+            color: var(--accent) !important;
+        }
+        main input:not([type="hidden"]),
+        main textarea,
+        main select {
+            border-color: #d8deea !important;
+            border-radius: 11px !important;
+            background-color: var(--surface) !important;
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+        }
+        main input:focus,
+        main textarea:focus,
+        main select:focus {
+            border-color: #818cf8 !important;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.13);
+            outline: none;
+        }
+        main article,
+        main .border-gray-200.rounded,
+        main .border-gray-200.rounded-lg {
+            border-color: var(--border) !important;
+        }
+        main [role="progressbar"] > div {
+            transition: width 300ms ease;
+        }
+        footer {
+            border-top: 1px solid var(--border);
+            background: rgba(255,255,255,.75) !important;
+            letter-spacing: 0.02em;
+        }
+        .dark {
+            color-scheme: dark;
+            --page-bg: #0c1020;
+            --surface: #151b2d;
+            --surface-muted: #1b2236;
+            --text-primary: #edf0fa;
+            --text-secondary: #a4aec3;
+            --border: #293149;
+            --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.18);
+        }
+        .dark body {
+            background:
+                radial-gradient(ellipse at 88% 5%, rgba(99, 102, 241, 0.14), transparent 27rem),
+                var(--page-bg) !important;
+            color: var(--text-primary) !important;
+        }
+        .dark main h2 { color: #f1f3ff; }
+        .dark main .bg-white {
+            background-color: var(--surface) !important;
+            border-color: var(--border) !important;
+        }
+        .dark main .bg-indigo-50,
+        .dark main .bg-green-50,
+        .dark main .bg-purple-50,
+        .dark main .bg-amber-50 {
+            background-color: var(--surface-muted) !important;
+            border-color: var(--border) !important;
+        }
+        .dark main .text-gray-800,
+        .dark main .text-gray-700,
+        .dark main .text-gray-600 { color: #d9deed !important; }
+        .dark main .text-gray-500 { color: #a4aec3 !important; }
+        .dark main input:not([type="hidden"]),
+        .dark main textarea,
+        .dark main select {
+            border-color: #39435d !important;
+            color: #edf0fa !important;
+        }
+        .dark main input::placeholder,
+        .dark main textarea::placeholder { color: #8994aa; }
+        .dark main .border-gray-200,
+        .dark main .border-gray-300 { border-color: var(--border) !important; }
+        .dark main .bg-gray-100,
+        .dark main .bg-gray-200 { background-color: #242c42 !important; }
+        .dark main .text-indigo-700 { color: #a5b4fc !important; }
+        .dark footer {
+            background: #111729 !important;
+            border-color: var(--border);
+            color: #a4aec3 !important;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col dark:bg-gray-950 dark:text-gray-100">
+    <nav class="bg-indigo-600 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-3 sm:px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+            <a href="/" class="text-lg sm:text-xl font-bold">LMS Platform</a>
+            <div class="flex items-center gap-2 sm:gap-3 flex-wrap justify-end">
+                <button id="themeToggle" type="button" aria-label="Toggle theme" class="inline-flex items-center justify-center w-8 h-8 rounded-md bg-white/15 text-white text-sm border border-white/30 hover:bg-white/20 transition-colors" title="Toggle dark mode">
+                    <span aria-hidden="true">🌙</span>
+                </button>
+                {% if session.get('user_id') %}
+                    {% if session.get('role') == 'student' %}
+                        <a href="/dashboard" class="bg-white/10 hover:bg-white/20 px-2.5 sm:px-3 py-1.5 rounded text-xs sm:text-sm">Dashboard</a>
+                    {% endif %}
+                    <a href="/notifications" class="bg-white/10 hover:bg-white/20 px-2.5 sm:px-3 py-1.5 rounded text-xs sm:text-sm">
+                        Notifications{% if unread_notification_count %} <span class="ml-1 inline-flex min-w-5 h-5 items-center justify-center rounded-full bg-rose-400 px-1 text-[10px] font-bold text-white">{{ unread_notification_count }}</span>{% endif %}
+                    </a>
+                    {% if session.get('role') == 'instructor' or session.get('username') in ['owner', 'developer'] %}
+                        <a href="/admin" class="bg-white/10 hover:bg-white/20 px-2.5 sm:px-3 py-1.5 rounded text-xs sm:text-sm">Admin Panel</a>
+                    {% endif %}
+                    <span class="hidden sm:inline text-xs sm:text-sm">Welcome, <strong>{{ session['username'] }}</strong> ({{ session['role'] }})</span>
+                    <a href="/logout" class="bg-red-500 hover:bg-red-600 px-2.5 sm:px-3 py-1.5 rounded text-xs sm:text-sm">Logout</a>
+                {% else %}
+                    <a href="/login" class="text-sm hover:underline">Login</a>
+                    <a href="/register" class="bg-white text-indigo-600 px-2.5 sm:px-3 py-1.5 rounded text-xs sm:text-sm font-semibold hover:bg-gray-100">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="p-4 mb-4 rounded text-sm {% if category == 'error' %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-200{% else %}bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-200{% endif %}">
+                        {{ msg }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="mb-6">
+            <form method="GET" action="/" class="flex flex-col gap-3 md:flex-row md:items-center">
+                <input type="search" name="q" value="{{ request.args.get('q', '') }}" placeholder="Search courses or instructors" class="w-full md:w-96 border border-gray-300 dark:border-gray-700 rounded px-3 py-2 text-sm bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <div class="flex gap-2 md:flex-none">
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded text-sm font-medium hover:bg-indigo-700">Search</button>
+                    {% if request.args.get('q') %}
+                        <a href="/" class="inline-flex items-center justify-center px-4 py-2 rounded border border-gray-300 dark:border-gray-700 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Clear</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+        {{ content | safe }}
+    </main>
+
+    <footer class="bg-gray-200 dark:bg-gray-800 text-center py-4 text-xs text-gray-600 dark:text-gray-300">
+        Minimal LMS Engine Starter
+    </footer>
+
+    <script>
+        const root = document.documentElement;
+        const themeToggle = document.getElementById('themeToggle');
+        const storedTheme = localStorage.getItem('theme');
+
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            root.classList.toggle('dark', isDark);
+            themeToggle.innerHTML = `<span aria-hidden="true">${isDark ? '☀️' : '🌙'}</span>`;
+            themeToggle.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        const preferredTheme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(preferredTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const nextTheme = root.classList.contains('dark') ? 'light' : 'dark';
+            applyTheme(nextTheme);
+        });
+    </script>
+</body>
+</html>
